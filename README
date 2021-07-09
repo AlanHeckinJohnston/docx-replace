@@ -1,0 +1,13 @@
+
+To replace text inside a docx, create an instance. The constructor is default.
+
+Call open() and pass in the path of the file.
+
+Then, call replace($search, $replace) as many times as necessary. Note it will only replace the first instance of something.
+
+Call save() to update the docx file.
+
+
+-- 2021-07-08 20:48 - ajohnston
+
+-- with any questions, email alanjohnston800@gmail.com

@@ -7,8 +7,10 @@ use SimpleXMLElement;
 use ZipArchive;
 
 /**
- * 
- * @package common\components\docx
+ * @author alan johnston
+ *
+ *  @package chaslain
+ * To use this, simply instantiate the class, call open() on the docx path, use the replace() function, and save().
  */
 class DocXReplace
 {
@@ -33,6 +35,13 @@ class DocXReplace
       }
    }
 
+   /**
+    * Replaces a piece of text in the docx.
+    * Returns TRUE if a replacement occured, FALSE otherwise.
+    * @param string $searchFor 
+    * @param string $replace 
+    * @return boolean 
+    */
    public function replace($searchFor, $replace)
    {
       $elementContents = $this->getElementContent($this->documentXMLElement);
@@ -48,9 +57,16 @@ class DocXReplace
       {
          $this->replaceInMap($pos, $elementContents, strlen($searchFor), $replace);
          $this->update($elementContents);
+         return true;
       }
+
+      return false;
    }
 
+   /**
+    * 
+    * @return void 
+    */
    public function save()
    {
       $this->zip->deleteName("word/document.xml");
@@ -60,10 +76,10 @@ class DocXReplace
 
    /**
     * 
-    * @param mixed $position 
-    * @param mixed $contents 
-    * @param mixed $searchLength 
-    * @param mixed $replacement 
+    * @param int $position 
+    * @param SimpleXMLElement $contents 
+    * @param int $searchLength 
+    * @param string $replacement 
     * @return void 
     */
    private function replaceInMap($position, &$contents, $searchLength, $replacement)
@@ -123,6 +139,11 @@ class DocXReplace
       }
    }
 
+   /**
+    * 
+    * @param array $contents 
+    * @return void 
+    */
    private function update($contents)
    {
       $map = $this->formatForUpdate($contents);
@@ -148,6 +169,14 @@ class DocXReplace
       }
    }
 
+   /**
+    * 
+    * @param SimpleXMLElement $element 
+    * @param array $key 
+    * @param string $value 
+    * @param int $index 
+    * @return void 
+    */
    private function updateSingleElement($element, array $key, $value, $index = 0)
    {
       if ($index == count($key)-1)
@@ -173,6 +202,11 @@ class DocXReplace
       }
    }
 
+   /**
+    * 
+    * @param array $contents 
+    * @return array 
+    */
    private function formatForUpdate($contents)
    {
       $result = [];
@@ -188,8 +222,7 @@ class DocXReplace
    /**
     * 
     * @param SimpleXMLElement $element 
-    * @param mixed $search 
-    * @param mixed $replace 
+    * @param array $location 
     * @return array 
     */
    private function getElementContent($element, $location = [])
@@ -220,7 +253,13 @@ class DocXReplace
 
       return $result;
    }
-
+ 
+   /**
+    * 
+    * @param array $map 
+    * @param string $element 
+    * @return array 
+    */
    private function incrementElementMap(&$map, $element)
    {
       if (!isset($map[$element]))
@@ -235,6 +274,11 @@ class DocXReplace
 
    }
 
+   /**
+    * 
+    * @return void 
+    * @throws Exception 
+    */
    private function getDocumentContent()
    {
       $file = $this->zip->getFromName("word/document.xml");
@@ -248,6 +292,12 @@ class DocXReplace
    }
 
 
+   /**
+    * 
+    * @param mixed $docx 
+    * @return void 
+    * @throws Exception - if the docx is invalid or does not exist.
+    */
    public function open($docx)
    {
       $this->zip = new ZipArchive;

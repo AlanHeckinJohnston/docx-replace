@@ -8,7 +8,7 @@
    ],
 
    "description": "Allows you to run simple search and replace operations on docx files",
-   "version": "1.0.0-stable",
+   "version": "1.0.0",
    "keywords": [
       "files",
       "docx",

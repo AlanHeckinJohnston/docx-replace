@@ -36,6 +36,16 @@ class DocXReplace
    }
 
    /**
+    * 
+    * @param string $searchFor 
+    * @return bool 
+    */
+   public function inDocument($searchFor)
+   {
+      return strpos($this->getLongString($this->getElementContent($this->documentXMLElement)), $searchFor) !== false;
+   }
+
+   /**
     * Replaces a piece of text in the docx.
     * Returns TRUE if a replacement occured, FALSE otherwise.
     * @param string $searchFor 
@@ -46,14 +56,7 @@ class DocXReplace
    {
       $elementContents = $this->getElementContent($this->documentXMLElement);
 
-      $longString = "";
-
-      foreach ($elementContents as $i=>$oneElement)
-      {
-         $longString .= $oneElement["data"];
-      }
-
-      if (($pos = strpos($longString, $searchFor)) !== false)
+      if (($pos = strpos($this->getLongString($elementContents), $searchFor)) !== false)
       {
          $this->replaceInMap($pos, $elementContents, strlen($searchFor), $replace);
          $this->update($elementContents);
@@ -61,6 +64,23 @@ class DocXReplace
       }
 
       return false;
+   }
+
+   /**
+    * 
+    * @param mixed $elementContents 
+    * @return string 
+    */
+   private function getLongString($elementContents)
+   {
+      $longString = "";
+
+      foreach ($elementContents as $i=>$oneElement)
+      {
+         $longString .= $oneElement["data"];
+      }
+
+      return $longString;
    }
 
    /**

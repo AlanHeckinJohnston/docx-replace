@@ -36,6 +36,15 @@ class DocXReplace
    }
 
    /**
+    * Returns the raw text in the file. No formatting is available.
+    * @return string 
+    */
+   public function getRawText()
+   {
+      return $this->getLongString($this->getElementContent($this->documentXMLElement));
+   }
+
+   /**
     * 
     * @param string $searchFor 
     * @return bool 

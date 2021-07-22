@@ -55,7 +55,28 @@ class DocXReplace
    }
 
    /**
-    * Replaces a piece of text in the docx.
+    * Replaces ALL occurances, not just the first of $searchFor.
+    * @param mixed $searchFor 
+    * @param mixed $replace 
+    * @return int - number of replacements performed.
+    */
+   public function replaceAll($searchFor, $replace)
+   {
+      $result = 0;
+
+      $replacing = true;
+      while ($replacing)
+      {
+         $replacing = $this->replace($searchFor, $replace);
+
+         $result += $replacing ? 1 : 0;
+      }
+
+      return $result;
+   }
+
+   /**
+    * Replaces a piece of text in the docx. Note - replaces only the first occurence.
     * Returns TRUE if a replacement occured, FALSE otherwise.
     * @param string $searchFor 
     * @param string $replace 
